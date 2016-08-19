@@ -26,6 +26,6 @@ void loop()
     }
   }
 
-    delay(100);                                               // short delay 
+    delay(200);                                               // short delay 
 }
 

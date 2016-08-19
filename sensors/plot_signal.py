@@ -6,7 +6,7 @@
 import serial
 # import numpy as np
 
-s = serial.Serial('/dev/ttyACM0', 115200)
+s = serial.Serial('/dev/ttyACM0', 9600)
 
 import matplotlib.pyplot as plt
 import numpy as np

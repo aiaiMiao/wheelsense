@@ -12,14 +12,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-N_sensors = 3
+N_sensors = 2
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
 data = [[0 for _ in range(100)] for _ in range(N_sensors)]
 
-data[0][0] = 1000
+data[0][0] = 1025
 
 # some X and Y data
 x = np.arange(100)
@@ -45,6 +45,9 @@ while True:
         except ValueError, IndexError:
             continue
 
+        if len(xs) < N_sensors:
+            continue
+            
         for i in range(N_sensors):
             data[i].append(xs[i])
             data[i] = data[i][-100:]
