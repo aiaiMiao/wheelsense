@@ -1,7 +1,3 @@
-#define buzzerPin 9
-#define potPin 14
-#define ultraPin 15
-
 #define NOTE_B0  31
 #define NOTE_C1  33
 #define NOTE_CS1 35
@@ -92,38 +88,86 @@
 #define NOTE_D8  4699
 #define NOTE_DS8 4978
 
+#define buzzerPin 9
+#define botDistPin 14
+#define topDistPin 15
+
+#define VOLTS_PER_UNIT    .0049F        // (.0049 for 10 bit A-D) 
+const int sample_size = 5;
+int topData[sample_size];
+int botData[sample_size];
+int idx = 0;
+bool sensorReady = false;
+int topDistAvg = 0;
+int botDistAvg = 0;
+
 void setup() {
   Serial.begin (9600);
   pinMode(buzzerPin, OUTPUT);
-  pinMode(potPin, OUTPUT);
-  pinMode(ultraPin, INPUT);
+  pinMode(botDistPin, INPUT);
+  pinMode(topDistPin, INPUT);
 }
 
-
-void buzz(int targetPin, long frequency, long length) {
-  digitalWrite(13, HIGH);
-  long delayValue = 1000000 / frequency / 2; // calculate the delay value between transitions
-  //// 1 second's worth of microseconds, divided by the frequency, then split in half since
-  //// there are two phases to each cycle
-  long numCycles = frequency * length / 1000; // calculate the number of cycles for proper timing
-  //// multiply frequency, which is really cycles per second, by the number of seconds to
-  //// get the total number of cycles to produce
-  for (long i = 0; i < numCycles; i++) { // for the calculated length of time...
-    digitalWrite(targetPin, HIGH); // write the buzzer pin high to push out the diaphram
-    delayMicroseconds(delayValue); // wait for the calculated delay value
-    digitalWrite(targetPin, LOW); // write the buzzer pin low to pull back the diaphram
-    delayMicroseconds(delayValue); // wait again or the calculated delay value
+int getdistAvg() {
+  int topTotal = 0;
+  int botTotal = 0;
+  for (int i = 0; i < sample_size; i++) {
+    topTotal += topData[i];
+    botTotal += botData[i];
   }
-  digitalWrite(13, LOW);
+  int topDistAvg = topTotal / sample_size;
+  int botDistAvg = botTotal / sample_size;
+  Serial.print("topDistAvg: ");
+  Serial.println(topDistAvg);
+  Serial.print("botDistAvg: ");
+  Serial.println(botDistAvg);
+  return min(topDistAvg, botDistAvg);
+}
 
+void giveFeedback(int distance) {
+  int sound = NOTE_C7;
+  if (distance < 50) {
+    if (distance < 15) {
+      distance = 15;
+    }
+    int duration = map(distance, 15, 50, 10, 300);
+    tone(buzzerPin, sound, 20);
+    delay(duration);
+    noTone(buzzerPin);
+  }
+}
+
+bool updateDistance() {
+  int topProx = analogRead(topDistPin);
+  int botProx = analogRead(botDistPin);
+  float topV = (float)topProx * VOLTS_PER_UNIT;
+  float botV = (float)botProx * VOLTS_PER_UNIT;
+  if (topV < .2 || botV < .2) {
+    return false;
+  }
+  
+  int topCm = 60.495 * pow(topV,-1.1904);
+  int botCm = 60.495 * pow(botV,-1.1904);
+
+  topData[idx] = topCm;
+  botData[idx++] = botCm;
+  if (!sensorReady && idx == 5) {
+    sensorReady = true;
+  }
+  idx = idx % sample_size;
+  return true;
 }
 
 void loop() {
-  int distance = analogRead(ultraPin);
-  distance = map(distance, 15, 346, 0, 1000);
-  Serial.println(distance);
-  int sound = NOTE_C7;
-  tone(buzzerPin, sound, distance/3);
-  delay(distance);
-  noTone(buzzerPin);
+  int inRange = updateDistance();
+  if (sensorReady && inRange) {
+    int minDist = getdistAvg();
+    Serial.print("minDist: ");
+    Serial.println(minDist);
+    giveFeedback(minDist);
+  } else {
+    Serial.println("Not in range");
+  }
+  Serial.println("------------");
+  delay(50);
 }
