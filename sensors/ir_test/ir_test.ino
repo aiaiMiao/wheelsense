@@ -11,7 +11,7 @@ int i;
 
 void setup()
 {
-    Serial.begin(115200);            // setup serial port to laptop to print values
+    Serial.begin(9600);            // setup serial port to laptop to print values
 }
 
 void loop() 
