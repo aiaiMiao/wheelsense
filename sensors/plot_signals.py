@@ -12,14 +12,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-N_sensors = 2
+N_sensors = 1
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
 data = [[0 for _ in range(100)] for _ in range(N_sensors)]
 
-data[0][0] = 1025
+data[0][0] = 10
 
 # some X and Y data
 x = np.arange(100)
@@ -55,8 +55,8 @@ while True:
             # set the new data
             lis[i].set_ydata(data[i])
 
-        # ax.relim()
-        # ax.autoscale_view(True,True,True)
+        ax.relim()
+        ax.autoscale_view(True,True,True)
         fig.canvas.draw()
 
         # time.sleep(0.001)

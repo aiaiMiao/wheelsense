@@ -5,9 +5,9 @@ Adafruit_DRV2605 drv;
 int value;
 
 #define N_SENSORS 2
-#define THRESHOLD 150
+#define THRESHOLD 100
 
-int sensors[] = {A0, A1};
+int sensors[] = {A14, A13};
 int hapticPins[] = {40, 52};
 int sensorValues[N_SENSORS];
 int pinOn[] = {false, false};
