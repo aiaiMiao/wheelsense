@@ -89,8 +89,8 @@
 #define NOTE_DS8 4978
 
 #define buzzerPin 9
-#define botDistPin 14
-#define topDistPin 15
+#define botDistPin A0
+#define topDistPin A1
 
 #define VOLTS_PER_UNIT    .0049F        // (.0049 for 10 bit A-D) 
 const int sample_size = 5;
