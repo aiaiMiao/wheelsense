@@ -7,10 +7,13 @@ int value;
 #define N_SENSORS 2
 #define THRESHOLD 100
 
-int sensors[] = {A14, A13};
-int hapticPins[] = {40, 52};
+int sensors[] = {A0, A1};
+int hapticPins[] = {39, 43}; // left, right
 int sensorValues[N_SENSORS];
 int pinOn[] = {false, false};
+
+// obstactle sensors
+// A5, A6 = left, right
 
 int mode = DRV2605_MODE_EXTTRIGLVL;
 
@@ -67,7 +70,7 @@ void engageHaptics(boolean left, boolean right) {
     if(mode == DRV2605_MODE_INTTRIG) {
         drv.setMode(DRV2605_MODE_INTTRIG);
         drv.stop();
-        delay(100);
+        delay(50);
 
         digitalWrite(hapticPins[0], LOW);
         digitalWrite(hapticPins[1], LOW);
@@ -91,14 +94,14 @@ void engageHaptics(boolean left, boolean right) {
         Serial.println("left");
         digitalWrite(hapticPins[0], HIGH);
         digitalWrite(hapticPins[1], LOW);
-        delay(500);
+        delay(400);
         digitalWrite(hapticPins[0], LOW);
     }
 
     if(right) {
         Serial.println("right");
         digitalWrite(hapticPins[1], HIGH);
-        delay(500);
+        delay(400);
         digitalWrite(hapticPins[1], LOW);
     }
 
