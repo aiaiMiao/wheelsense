@@ -128,8 +128,6 @@ void loop() {
 
     boolean left = sensorValues[0] < THRESHOLD || sensorValues[2] > THRESHOLD_OBJ  ;
     boolean right = sensorValues[1] < THRESHOLD || sensorValues[3] > THRESHOLD_OBJ ;
- left=false;
-  right=false;
  
    
     engageHaptics(left, right);
