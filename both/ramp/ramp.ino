@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include "Adafruit_DRV2605.h"
 
+//hello
 Adafruit_DRV2605 drv;
 int value;
 
