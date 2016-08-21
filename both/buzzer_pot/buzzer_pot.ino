@@ -91,6 +91,12 @@
 #define buzzerPin 9
 #define botDistPin A0
 #define topDistPin A1
+#define frontDistPin A5
+
+#define FRONT_DIST_THRESHOLD 250
+
+#define BACK_FEEDBACK_SOUND NOTE_C7
+#define FRONT_FEEDBACK_SOUND NOTE_A4
 
 #define VOLTS_PER_UNIT    .0049F        // (.0049 for 10 bit A-D) 
 const int sample_size = 5;
@@ -124,8 +130,7 @@ int getdistAvg() {
   return min(topDistAvg, botDistAvg);
 }
 
-void giveFeedback(int distance) {
-  int sound = NOTE_C7;
+void giveFeedback(int distance, int sound) {
   if (distance < 50) {
     if (distance < 15) {
       distance = 15;
@@ -137,12 +142,26 @@ void giveFeedback(int distance) {
   }
 }
 
+void giveBackFeedback(int distance) {
+  giveFeedback(distance, BACK_FEEDBACK_SOUND);
+}
+
+void giveFrontFeedback() {
+  giveFeedback(25, FRONT_FEEDBACK_SOUND);
+}
+
+
 bool updateDistance() {
   int topProx = analogRead(topDistPin);
   int botProx = analogRead(botDistPin);
+  Serial.print("topProx: ");
+  Serial.println(topProx);
+  Serial.print("botProx: ");
+  Serial.println(botProx);
+  
   float topV = (float)topProx * VOLTS_PER_UNIT;
   float botV = (float)botProx * VOLTS_PER_UNIT;
-  if (topV < .2 || botV < .2) {
+  if (topV < .2 && botV < .2) {
     return false;
   }
   
@@ -158,16 +177,41 @@ bool updateDistance() {
   return true;
 }
 
-void loop() {
+void handleBack() {
   int inRange = updateDistance();
-  if (sensorReady && inRange) {
     int minDist = getdistAvg();
     Serial.print("minDist: ");
     Serial.println(minDist);
-    giveFeedback(minDist);
+  if (sensorReady && inRange) {
+    giveBackFeedback(minDist);
   } else {
     Serial.println("Not in range");
   }
   Serial.println("------------");
   delay(50);
 }
+
+double frontDist = 300;
+
+boolean handleFront() {
+  double dist = analogRead(frontDistPin);
+  const double f = 0.3;
+  frontDist = f * dist + (1-f) * frontDist;
+  
+  Serial.print("frontDist:");
+  Serial.println(dist);
+  if(dist < FRONT_DIST_THRESHOLD) {
+    giveFrontFeedback();
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void loop() {
+  boolean frontBeep = handleFront();
+  if(!frontBeep) {
+    handleBack();
+  }
+}
+
