@@ -6,13 +6,13 @@
 import serial
 # import numpy as np
 
-s = serial.Serial('/dev/cu.usbmodem1421', 9600)
+s = serial.Serial('/dev/ttyACM0', 9600)
 
 import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-N_sensors = 2
+N_sensors = 4
 
 
 fig = plt.figure()
