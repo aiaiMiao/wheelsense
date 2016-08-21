@@ -89,14 +89,14 @@
 #define NOTE_DS8 4978
 
 #define buzzerPin 9
-#define botDistPin A0
-#define topDistPin A1
+#define botDistPin A1
+#define topDistPin A3
 #define frontDistPin A5
 
 #define FRONT_DIST_THRESHOLD 250
 
 #define BACK_FEEDBACK_SOUND NOTE_C7
-#define FRONT_FEEDBACK_SOUND NOTE_A4
+#define FRONT_FEEDBACK_SOUND NOTE_C5
 
 #define VOLTS_PER_UNIT    .0049F        // (.0049 for 10 bit A-D) 
 const int sample_size = 5;
