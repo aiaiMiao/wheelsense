@@ -179,16 +179,15 @@ bool updateDistance() {
 
 void handleBack() {
   int inRange = updateDistance();
-    int minDist = getdistAvg();
-    Serial.print("minDist: ");
-    Serial.println(minDist);
+  int minDist = getdistAvg();
+  Serial.print("minDist: ");
+  Serial.println(minDist);
   if (sensorReady && inRange) {
     giveBackFeedback(minDist);
   } else {
     Serial.println("Not in range");
   }
   Serial.println("------------");
-  delay(50);
 }
 
 double frontDist = 300;
@@ -213,5 +212,6 @@ void loop() {
   if(!frontBeep) {
     handleBack();
   }
+  delay(50);
 }
 
