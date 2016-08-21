@@ -6,7 +6,7 @@ Adafruit_DRV2605 drv;
 int value;
 
 #define N_SENSORS 4
-#define THRESHOLD_RAMP 100
+#define THRESHOLD_RAMP 180
 #define THRESHOLD_OBJ 150
 #define THRESHOLD_OBJ_RAMP 350
 
