@@ -130,8 +130,6 @@ void loop() {
     boolean left = sensorValues[0] < THRESHOLD_RAMP || sensorValues[2] > THRESHOLD_OBJ || sensorValues[0] > THRESHOLD_OBJ_RAMP  ;
     boolean right = sensorValues[1] < THRESHOLD_RAMP || sensorValues[3] > THRESHOLD_OBJ || sensorValues[1] > THRESHOLD_OBJ_RAMP ;
 
-    left = right = false;
-   
     engageHaptics(left, right);
 
     delay(100);

@@ -93,7 +93,7 @@
 #define topDistPin A3
 #define frontDistPin A5
 
-#define FRONT_DIST_THRESHOLD 250
+#define FRONT_DIST_THRESHOLD 150
 
 #define BACK_FEEDBACK_SOUND NOTE_C7
 #define FRONT_FEEDBACK_SOUND NOTE_C5
