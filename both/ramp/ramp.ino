@@ -7,11 +7,11 @@ int value;
 
 #define N_SENSORS 4
 #define THRESHOLD_RAMP 100
-#define THRESHOLD_OBJ 80
+#define THRESHOLD_OBJ 150
 #define THRESHOLD_OBJ_RAMP 350
 
 int sensors[] = {A5, A6,A0,A1};
-int hapticPins[] = {39, 43}; // left, right
+int hapticPins[] = {43, 39}; // left, right
 int sensorValues[N_SENSORS];
 int pinOn[] = {false, false};
 
@@ -65,7 +65,7 @@ void engageHaptics(boolean left, boolean right) {
         Serial.println("both");
         drv.setMode(DRV2605_MODE_INTTRIG);
         drv.go();
-        delay(500);
+        delay(400);
         mode = DRV2605_MODE_INTTRIG;
         return;
     }
@@ -114,7 +114,7 @@ void engageHaptics(boolean left, boolean right) {
 void loop() {
 
   for(int i=0;i<N_SENSORS;i++){
-     sensorValues[i] = analogRead(sensors[i])*0.2 + sensorValues[i]*0.8;
+     sensorValues[i] = analogRead(sensors[i])*0.3 + sensorValues[i]*0.7;
     }
 
     Serial.print(sensorValues[0]);
