@@ -6,10 +6,11 @@ Adafruit_DRV2605 drv;
 int value;
 
 #define N_SENSORS 4
-#define THRESHOLD 100
+#define THRESHOLD_RAMP 100
 #define THRESHOLD_OBJ 80
+#define THRESHOLD_OBJ_RAMP 350
 
-int sensors[] = {A0, A1,A5,A6};
+int sensors[] = {A5, A6,A0,A1};
 int hapticPins[] = {39, 43}; // left, right
 int sensorValues[N_SENSORS];
 int pinOn[] = {false, false};
@@ -116,19 +117,20 @@ void loop() {
      sensorValues[i] = analogRead(sensors[i])*0.2 + sensorValues[i]*0.8;
     }
 
-    /*Serial.print(sensorValues[0]);
+    Serial.print(sensorValues[0]);
     Serial.print(", ");
     Serial.print(sensorValues[1]);
-    Serial.print(",");*/
+    Serial.print(", ");
 
     Serial.print(sensorValues[2]);
     Serial.print(", ");
     Serial.print(sensorValues[3]);
-     Serial.print(",");
+    Serial.println();
 
-    boolean left = sensorValues[0] < THRESHOLD || sensorValues[2] > THRESHOLD_OBJ  ;
-    boolean right = sensorValues[1] < THRESHOLD || sensorValues[3] > THRESHOLD_OBJ ;
- 
+    boolean left = sensorValues[0] < THRESHOLD_RAMP || sensorValues[2] > THRESHOLD_OBJ || sensorValues[0] > THRESHOLD_OBJ_RAMP  ;
+    boolean right = sensorValues[1] < THRESHOLD_RAMP || sensorValues[3] > THRESHOLD_OBJ || sensorValues[1] > THRESHOLD_OBJ_RAMP ;
+
+    left = right = false;
    
     engageHaptics(left, right);
 
