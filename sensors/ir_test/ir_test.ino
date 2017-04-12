@@ -3,10 +3,10 @@
 /* ReadSharpIR.pde
 *  simple sketch to read values from a IR Distance Sensor
 */ 
-#define N_SENSORS 3
+#define N_SENSORS 4
 
 int value;
-int sensors[] = {A0, A1, A2};
+int sensors[] = {A2, A3, A4, A5};
 int i;
 
 void setup()
@@ -25,7 +25,6 @@ void loop()
       Serial.println();
     }
   }
-
     delay(200);                                               // short delay 
 }
 

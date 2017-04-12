@@ -88,10 +88,11 @@
 #define NOTE_D8  4699
 #define NOTE_DS8 4978
 
-#define buzzerPin 9
+#define NOTE_C7  2093
+#define buzzerPin 3
 #define botDistPin A1
-#define topDistPin A3
-#define frontDistPin A5
+//#define topDistPin A3
+#define frontDistPin A0
 
 #define FRONT_DIST_THRESHOLD 115
 
@@ -100,34 +101,35 @@
 
 #define VOLTS_PER_UNIT    .0049F        // (.0049 for 10 bit A-D) 
 const int sample_size = 5;
-int topData[sample_size];
+//int topData[sample_size];
 int botData[sample_size];
 int idx = 0;
 bool sensorReady = false;
-int topDistAvg = 0;
+//int topDistAvg = 0;
 int botDistAvg = 0;
 
 void setup() {
   Serial.begin (9600);
   pinMode(buzzerPin, OUTPUT);
   pinMode(botDistPin, INPUT);
-  pinMode(topDistPin, INPUT);
+//  pinMode(topDistPin, INPUT);
 }
 
 int getdistAvg() {
-  int topTotal = 0;
+//  int topTotal = 0;
   int botTotal = 0;
   for (int i = 0; i < sample_size; i++) {
-    topTotal += topData[i];
+//    topTotal += topData[i];
     botTotal += botData[i];
   }
-  int topDistAvg = topTotal / sample_size;
+//  int topDistAvg = topTotal / sample_size;
   int botDistAvg = botTotal / sample_size;
-  Serial.print("topDistAvg: ");
-  Serial.println(topDistAvg);
+//  Serial.print("topDistAvg: ");
+//  Serial.println(topDistAvg);
   Serial.print("botDistAvg: ");
   Serial.println(botDistAvg);
-  return min(topDistAvg, botDistAvg);
+//  return min(topDistAvg, botDistAvg);
+  return botDistAvg;
 }
 
 void giveFeedback(int distance, int sound) {
@@ -152,23 +154,24 @@ void giveFrontFeedback() {
 
 
 bool updateDistance() {
-  int topProx = analogRead(topDistPin);
+//  int topProx = analogRead(topDistPin);
   int botProx = analogRead(botDistPin);
-  Serial.print("topProx: ");
-  Serial.println(topProx);
+//  Serial.print("topProx: ");
+//  Serial.println(topProx);
   Serial.print("botProx: ");
   Serial.println(botProx);
   
-  float topV = (float)topProx * VOLTS_PER_UNIT;
+//  float topV = (float)topProx * VOLTS_PER_UNIT;
   float botV = (float)botProx * VOLTS_PER_UNIT;
-  if (topV < .2 && botV < .2) {
+//  if (topV < .2 && botV < .2) {
+  if (botV < .2) {
     return false;
   }
   
-  int topCm = 60.495 * pow(topV,-1.1904);
+//  int topCm = 60.495 * pow(topV,-1.1904);
   int botCm = 60.495 * pow(botV,-1.1904);
 
-  topData[idx] = topCm;
+//  topData[idx] = topCm;
   botData[idx++] = botCm;
   if (!sensorReady && idx == 5) {
     sensorReady = true;
